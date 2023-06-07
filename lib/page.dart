@@ -1,37 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'data.dart';
-
 class indiplans extends StatefulWidget {
   const indiplans({super.key});
   @override
   State<indiplans> createState() => _indiplansState();
 }
 class _indiplansState extends State<indiplans> {
-  String planName='';
-  String planId='';
-  String purchasedOn='';
-  String renewalOn='';
-  String purchasePrice='';
-  String renewalPrice='';
-
   void init() async
-  {super.initState();}
-
-  void getvalues(dynamic data) async {
-    setState(() {
-      planName = data['activePlanDetails']['planName'];
-      planId = data['activePlanDetails']['planId'];
-      int pur = data['activePlanDetails']['purchasedOn'];
-      DateTime purOn = DateTime.fromMillisecondsSinceEpoch(pur);
-      purchasedOn = DateFormat('dd MMM "yy').format(purOn);
-      int ren = data['activePlanDetails']['renewalOn'];
-      DateTime renon = DateTime.fromMillisecondsSinceEpoch(ren);
-      renewalOn = DateFormat("dd MMM ${"' "}yy").format(renon);
-      purchasePrice = data['activePlanDetails']['purchasePrice'];
-      int renp = data['activePlanDetails']['renewalPrice'];
-      renewalPrice=renp.toString();
-    });
+  {
+    super.initState();
   }
   @override
   Widget build(BuildContext context) {
@@ -40,13 +18,14 @@ class _indiplansState extends State<indiplans> {
           child: const Text('Indi PLANS'),
           onPressed: () async {
             var data = await Data.getdata();
-              getvalues(data);
-              bottomsheet();
+            setState(() {
+              bottomsheet(data);
+            });
           }
       ),
     );
   }
-  void bottomsheet() async{
+  void bottomsheet(dynamic data){
       showModalBottomSheet(
         context: context,
         isScrollControlled: true,
@@ -70,7 +49,7 @@ class _indiplansState extends State<indiplans> {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: Text("Active plan :$planName",
+                      child: Text("Active plan :${data['activePlanDetails']['planName']}",
                           style: const TextStyle(
                               fontWeight: FontWeight.w700,
                               color: Color(0xff202020),
@@ -94,7 +73,7 @@ class _indiplansState extends State<indiplans> {
                                 ),
                                 Align(
                                   alignment: FractionalOffset.centerLeft,
-                                  child: Text(purchasedOn,
+                                  child: Text(DateFormat('dd MMM "yy').format(DateTime.fromMillisecondsSinceEpoch(data['activePlanDetails']['purchasedOn'])),
                                       style: const TextStyle(
                                           fontWeight: FontWeight.w600,
                                           color: Color(0xff202020),
@@ -119,7 +98,7 @@ class _indiplansState extends State<indiplans> {
                               ),
                               Align(
                                 alignment: FractionalOffset.centerLeft,
-                                child: Text(purchasePrice,
+                                child: Text(data['activePlanDetails']['purchasePrice'].toString(),
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w600,
                                         color: Color(0xff202020),
@@ -149,7 +128,7 @@ class _indiplansState extends State<indiplans> {
                                 ),
                                 Align(
                                   alignment: FractionalOffset.centerLeft,
-                                  child: Text(renewalOn,
+                                  child: Text(DateFormat('dd MMM "yy').format(DateTime.fromMillisecondsSinceEpoch(data['activePlanDetails']['renewalOn'])),
                                       style: const TextStyle(
                                           fontWeight: FontWeight.w600,
                                           color: Color(0xff202020),
@@ -174,7 +153,7 @@ class _indiplansState extends State<indiplans> {
                               ),
                               Align(
                                 alignment: FractionalOffset.centerLeft,
-                                child: Text(renewalPrice,
+                                child: Text(data['activePlanDetails']['renewalPrice'].toString(),
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w600,
                                         color: Color(0xff202020),

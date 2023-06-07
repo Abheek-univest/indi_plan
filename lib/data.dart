@@ -7,11 +7,11 @@ class Data
 {
   static dynamic getdata() async{
     var url=(Uri.parse("https://jsonblob.com/api/1115609979729231872"));
-      final response= await http.get(url);
-      if(200==response.statusCode)
-      {
-        dynamic data=jsonDecode(response.body);
-        return data;
-      }
+    final response= await http.get(url);
+    if(200==response.statusCode)
+    {
+      dynamic data=jsonDecode(response.body);
+      return data;
+    }
   }
 }
